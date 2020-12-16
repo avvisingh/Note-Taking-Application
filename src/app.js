@@ -41,6 +41,7 @@ app.post('/api/notes', async (req, res) => {
 });
 
 app.delete('/api/notes/:id', async (req, res) => {
+
     let noteToDeleteId = req.params.id; 
     for (let i = 0; i < notes.length; i++ ) {
         if (notes[i].id === noteToDeleteId) {
@@ -49,7 +50,7 @@ app.delete('/api/notes/:id', async (req, res) => {
     }
 
     await fs.writeFile(dbPath, JSON.stringify(notes));
-    res.redirect('back');
+    res.json({success: true, msg: `Your note with id ${noteToDeleteId} has successfully been deleted.`});
 });
 
 app.get('*', (req, res) => {
