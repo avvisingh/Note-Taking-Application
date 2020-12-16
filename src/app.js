@@ -13,6 +13,7 @@ const notesPath = path.join(__dirname, '../public/notes.html');
 const indexPath = path.join(__dirname, '../public/index.html');
 const port = process.env.PORT || 3000;
 const notes = require('../db/db.json');
+const { networkInterfaces } = require('os');
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -28,16 +29,28 @@ app.get('/api/notes', (req, res) => {
 });
 
 app.post('/api/notes', async (req, res) => {
-        const noteToAdd = {};
-        noteToAdd.title = req.body.title;
-        noteToAdd.text = req.body.text;
-        noteToAdd.id = nanoid.nanoid();
+    const noteToAdd = {};
+    noteToAdd.title = req.body.title;
+    noteToAdd.text = req.body.text;
+    noteToAdd.id = nanoid.nanoid();
 
-        notes.push(noteToAdd);
-        await fs.writeFile(dbPath, JSON.stringify(notes));
+    notes.push(noteToAdd);
+    await fs.writeFile(dbPath, JSON.stringify(notes));
 
-        return res.json({success: true, msg: `You have successfully added a note with title: ${noteToAdd.title} and text: ${noteToAdd.text}`});
+    return res.json({ success: true, msg: `You have successfully added a note with title: ${noteToAdd.title} and text: ${noteToAdd.text}` });
 
+});
+
+app.delete('/api/notes/:id', async (req, res) => {
+    let noteToDeleteId = req.params.id; 
+    for (let i = 0; i < notes.length; i++ ) {
+        if (notes[i].id === noteToDeleteId) {
+            notes.splice(i, 1);
+        }
+    }
+
+    await fs.writeFile(dbPath, JSON.stringify(notes));
+    res.redirect('back');
 })
 
 app.get('*', (req, res) => {
