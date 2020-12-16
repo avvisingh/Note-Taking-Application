@@ -19,7 +19,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(publicDirPath));
 
-
 app.get('/notes', (req, res) => {
     res.sendFile(notesPath);
 });
@@ -51,7 +50,7 @@ app.delete('/api/notes/:id', async (req, res) => {
 
     await fs.writeFile(dbPath, JSON.stringify(notes));
     res.redirect('back');
-})
+});
 
 app.get('*', (req, res) => {
     res.sendFile(indexPath);
