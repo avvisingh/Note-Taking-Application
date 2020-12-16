@@ -58,8 +58,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(port, () => {
-    let randomID = nanoid.nanoid();
-
     console.log(`server is now listening on port ${port}`);
-    console.log(`random id generation test : ${randomID}`)
 });
