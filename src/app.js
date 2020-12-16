@@ -28,9 +28,12 @@ app.get('/api/notes', (req, res) => {
 });
 
 app.post('/api/notes', async (req, res) => {
-        const noteToAdd = req.body;
+        const noteToAdd = {};
+        noteToAdd.title = req.body.title;
+        noteToAdd.text = req.body.text;
+        noteToAdd.id = nanoid.nanoid();
+
         notes.push(noteToAdd);
-    
         await fs.writeFile(dbPath, JSON.stringify(notes));
 
         return res.json({success: true, msg: `You have successfully added a note with title: ${noteToAdd.title} and text: ${noteToAdd.text}`});
